@@ -83,10 +83,47 @@ public class StringOperation {
     }
 
     /**
-     * 找出该字符串中的最长不重复子串
-     * @param str
+     * 找出一个字符串中的最长的且不重复子串
+     * @param string
      * @return
      */
+    //时间复杂度o(N)
+    public static String maxUniqueSubstring(String string) {
+        int begin = 0;
+        int maxLength = 0;
+        int curLength = 0;
+        int[] positions = new int[26];
+        for (int i = 0; i < positions.length; i++) {
+            positions[i] = -1; //初始化为-1，负数表示没出现过
+        }
+        for (int i = 0; i < string.length(); i++) {
+            int curChar = string.charAt(i) - 'a';
+            int prePosition = positions[curChar];
+            //当前字符与它上次出现位置之间的距离
+            int distance = i - prePosition;
+            //当前字符第一次出现，或者前一个非重复子字符串中没有包含当前字符
+            if (prePosition < 0 || distance > curLength) {
+                curLength++;
+            } else {
+                //更新最长非重复子字符串的长度
+                if (curLength > maxLength){
+                    maxLength = curLength;
+                    begin = i - curLength;
+                }
+                curLength = distance;
+            }
+            positions[curChar] = i; //更新字符出现的位置
+        }
+        if (curLength > maxLength) {
+            maxLength = curLength;
+        }
+
+        StringBuilder tmp = new StringBuilder();
+        for (int i = begin; i < begin + maxLength; ++i) {
+            tmp.append(string.charAt(i));
+        }
+        return tmp.toString();
+    }
     //时间复杂度o(n^2)
     public static String findSubString(String str) {
         int i, j;
@@ -118,42 +155,58 @@ public class StringOperation {
         }
         return tmp.toString();
     }
-    //时间复杂度o(N)
-    public static String max_unique_substring3(String string) {
-        int begin = 0;
-        int maxLength = 0;
-        int curLength = 0;
-        int[] positions = new int[26];
-        for (int i = 0; i < positions.length; i++) {
-            positions[i] = -1; //初始化为-1，负数表示没出现过
-        }
-        for (int i = 0; i < string.length(); i++) {
-            int curChar = string.charAt(i) - 'a';
-            int prePosition = positions[curChar];
-            //当前字符与它上次出现位置之间的距离
-            int distance = i - prePosition;
-            //当前字符第一次出现，或者前一个非重复子字符串中没有包含当前字符
-            if (prePosition < 0 || distance > curLength) {
-                curLength++;
-            } else {
-                //更新最长非重复子字符串的长度
-                if (curLength > maxLength){
-                    maxLength = curLength;
-                    begin = i;
-                }
-                curLength = distance;
-            }
-            positions[curChar] = i; //更新字符出现的位置
-        }
-        if (curLength > maxLength) {
-            maxLength = curLength;
-        }
 
-        StringBuilder tmp = new StringBuilder();
-        for (int i = begin; i < begin + maxLength; ++i) {
-            tmp.append(string.charAt(i));
+    /**
+     * 找出字符串中最长的回文子“串” （子串是连续的）
+     * @param s
+     * @return
+     */
+    public static String longestPalindrome(String s) {
+        if (s.length() < 2) { // 单个字符肯定是回文串，直接返回s
+            return s;
         }
-        return tmp.toString();
+        boolean[][] dp = new boolean[s.length()][s.length()];  // 初始化一个二维数组，值默认是false
+        String result = s.substring(0,1);
+        for (int j = 0; j < s.length(); j++){
+            for (int i = 0; i <= j; i++){
+                if(s.charAt(i) == s.charAt(j) && (j - i <= 2 || dp[i+1][j-1])){
+                    dp[i][j] = true;
+                }else {
+                    dp[i][j] = false;
+                }
+                if (dp[i][j]){
+                    if (j - i + 1 > result.length()){
+                        result = s.substring(i, j + 1);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * https://blog.csdn.net/sugarbliss/article/details/80730929
+     * 找出字符串中最长的回文子序列的长度（子序列相对位置不变，可以非连续）
+     *当i>j时，f(i,j)=0。
+     *当i=j时，f(i,j)=1。
+     *当i<j并且s[i]=s[j]时，f(i,j)=f(i+1,j-1)+2。
+     *当i<j并且s[i]≠s[j]时，f(i,j)=max( f(i,j-1), f(i+1,j) )
+     * @param s
+     * @return
+     */
+    public static int getLongestPalindromeSubStr(String s){
+        int len = s.length();
+        int [][] dp = new int[len][len];
+        for(int i = len - 1; i >= 0; i--){
+            dp[i][i] = 1;
+            for(int j = i+1; j < len; j++){
+                if(s.charAt(i) == s.charAt(j))
+                    dp[i][j] = dp[i+1][j-1] + 2;
+                else
+                    dp[i][j] = Math.max(dp[i+1][j], dp[i][j-1]);
+            }
+        }
+        return dp[0][len-1];
     }
 
 
@@ -163,7 +216,7 @@ public class StringOperation {
      * @param sum
      * @return
      */
-    public ArrayList<Integer> FindNumbersWithSum(int [] array, int sum) {
+    public ArrayList<Integer> findNumbersWithSum(int [] array, int sum) {
         ArrayList<Integer> list = new ArrayList<Integer>();
         int len = array.length;
         int i = 0;
