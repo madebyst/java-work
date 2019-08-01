@@ -1,5 +1,7 @@
 package common;
 
+import java.util.Arrays;
+
 /**
  * @Author: suntong
  * @Date:Created in 11:01 2019/7/3
@@ -110,5 +112,39 @@ public class IntegerOperation {
             number = number / toRadix;
         }
         return sb.reverse().toString();
+    }
+
+    /**
+     * 求一个正整数数最少可以由几个数的平房组成
+     * @param n
+     * @return
+     */
+    public int numSquares(int n) {
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            int min = Integer.MAX_VALUE;
+            int idx = 1;
+            while (i - idx * idx >= 0) {
+                min = Math.min(dp[i - idx * idx] + 1, min);
+                idx++;
+            }
+            dp[i] = min;
+        }
+        return dp[n];
+    }
+    public static Integer powerOfcombine(int n){
+        if(n == 0 || n == 1){
+            return n;
+        }
+        int min = n;
+        for(int i = 0;i * i <= n ;i++){
+            n = powerOfcombine(n - i * i) +1;
+            if(n < min){
+                min = n;
+            }
+        }
+        return min;
     }
 }

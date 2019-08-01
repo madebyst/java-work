@@ -1,6 +1,6 @@
-package Tree;
+package tree;
 
-import Tree.model.TNode;
+import tree.model.TNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

@@ -12,8 +12,9 @@ public class Main {
 //        int binaryOneCount = IntegerOperation.getBinaryOneCount(-10);
 //        System.out.println(binaryOneCount);
 //        System.out.println(IntegerOperation.transRadix("10", 36, 35));
+        System.out.println(IntegerOperation.powerOfcombine(5));
 
-        System.out.println(StringOperation.longestPalindrome("ababa"));
+//        System.out.println(StringOperation.longestPalindrome("ababa"));
 
     }
 }

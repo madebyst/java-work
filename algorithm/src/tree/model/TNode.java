@@ -1,4 +1,4 @@
-package Tree.model;
+package tree.model;
 
 /**
  * @Author: suntong
